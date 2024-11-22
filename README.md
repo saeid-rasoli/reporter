@@ -1,2 +1,2 @@
-* Process and plot csv reports
+# Process and plot csv reports
 
