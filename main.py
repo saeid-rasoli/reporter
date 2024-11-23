@@ -3,6 +3,7 @@ import pandas as pd
 import itertools
 import numpy as np
 import matplotlib.ticker as mtick
+from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
 
 
 # fix float format
@@ -73,27 +74,159 @@ def main():
         percent_match = df['NoRadius'] / df['Total'] * 100
         tmp_fixed_region_values[i]['Match%'] = percent_match
 
+
     # figure the summary of radius mismatch
     fig, ax = plt.subplots()
+
+    ## radius mismatch
+    plt.title(f'Radius Mismatch Summary Last {len(date)} Days', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             percent_dismatch = df.pop('Match%')
             plt.plot(date, percent_dismatch, label=f"{regions[i].upper()} x̄ = {np.mean(percent_dismatch):.2f}%", linewidth=2)
+            plt.ylabel('percentage', fontsize=13)
             plt.grid(linestyle='dotted')
             plt.legend()
+
+            # fix ytick formatter
+            fmt = '%.0f%%' # Format you want the ticks, e.g. '40%'
+            yticks = mtick.FormatStrFormatter(fmt)
+            ax.yaxis.set_major_formatter(yticks)
         except:
             print('some regions are not ok!')
 
-    fmt = '%.0f%%' # Format you want the ticks, e.g. '40%'
-    yticks = mtick.FormatStrFormatter(fmt)
-    ax.yaxis.set_major_formatter(yticks)
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total records
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total Records Count Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('Total')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('number of records', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total no radiu
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total No Radius Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('NoRadius')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of No Radius', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total with radius
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total With Radius Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('WithRadius')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of With Radius', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total SPR
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total SPR Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('SPR')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of SPR', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+    
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total SP
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total SP Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('SP')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of SP', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total SR
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total SR Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('SR')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of SR', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+    # show and reset each figure
+    plt.show()
+    plt.clf()
+
+    ## total S
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total S Summary Last {len(date)} Days', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('S')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of S', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+
     plt.xlabel('Date', fontsize=13)
     plt.xticks(rotation=40)
-    plt.ylabel('percentage', fontsize=13)
-    fig.suptitle(f'Radius Mismatch Summary Last {len(date)} Days', fontsize=18)
     plt.show()
 
-    # TODO: figure each field
     # TODO: fix each region rows (add zero mock row to needed region)
 
 
