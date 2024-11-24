@@ -89,7 +89,7 @@ def main():
         dfi.export(df_styled, f'imgs/{regions[i]}.png', table_conversion="matplotlib", dpi=300)
 
 
-    figure the summary of radius mismatch
+    # figure the summary of radius mismatch
     fig, ax = plt.subplots()
     plt.figure(figsize=(16, 9))
 
