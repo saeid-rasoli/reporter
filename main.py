@@ -84,12 +84,8 @@ def main():
     # export dataframe with gradient style to png image
     df_for_print = tmp_fixed_region_values
     for i, df in enumerate(df_for_print):
-        styles = [dict(selector="caption", props=[("text-align", "center"),
-                  ("font-size", "180%"),
-                  ("color", 'black')])]
-
         df.index = date
-        df_styled = df.style.set_caption(f'Region: {regions[i].upper()}').set_table_styles(styles)
+        df_styled = df.style.set_caption(f'Region: {regions[i].upper()}')
         df_styled.background_gradient()
         dfi.export(df_styled, f'imgs/{regions[i]}.png', table_conversion="matplotlib", dpi=300)
 
