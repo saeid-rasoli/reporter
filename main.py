@@ -95,13 +95,13 @@ def main():
             plt.legend()
 
             # fix ytick formatter
-            fmt = '%.0f%%' # Format you want the ticks, e.g. '40%'
-            yticks = mtick.FormatStrFormatter(fmt)
-            ax.yaxis.set_major_formatter(yticks)
+            plt.yticks(plt.yticks()[0], ['{:.0f}%'.format(x) for x in plt.yticks()[0]])
+
         except:
             print('some regions are not ok!')
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/radius_mismatch.png', dpi=300)
     plt.clf()
 
@@ -120,6 +120,7 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_records.png', dpi=300)
     plt.clf()
 
@@ -138,6 +139,7 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_no_radius.png', dpi=300)
     plt.clf()
 
@@ -156,6 +158,7 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_with_radius.png', dpi=300)
     plt.clf()
 
@@ -174,6 +177,7 @@ def main():
             print('some regions are not ok!', err)
     
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_SPR.png', dpi=300)
     plt.clf()
 
@@ -192,6 +196,7 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_SP.png', dpi=300)
     plt.clf()
 
@@ -210,6 +215,7 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
+    plt.xticks(rotation=40)
     plt.savefig('imgs/total_SR.png', dpi=300)
     plt.clf()
 
@@ -228,12 +234,10 @@ def main():
             print('some regions are not ok!', err)
 
 
-    plt.xlabel('Date', fontsize=13)
     plt.xticks(rotation=40)
     plt.savefig('imgs/total_S.png', dpi=300)
 
     # TODO: fix each region rows (add zero mock row to needed region)
-    # TODO: save each images to the /imgs directory
 
 
 if __name__ == '__main__':
