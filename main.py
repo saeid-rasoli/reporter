@@ -3,7 +3,7 @@ import pandas as pd
 import itertools
 import numpy as np
 import matplotlib.ticker as mtick
-from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
+from matplotlib.ticker import FormatStrFormatter
 
 
 # fix float format
@@ -63,6 +63,11 @@ def main():
     # create uniq date
     date = sorted(list(set(itertools.chain(*date))))
 
+    for i, day in enumerate(date):
+        day = day[:4] + '-' + day[4:6] + '-' + day[6:]
+        date[i] = day
+    
+
     # union of two region to one (tee11 + tee21)
     for i in range(0, len(dfs), 2):
         if i + 1 < len(dfs):
@@ -77,9 +82,10 @@ def main():
 
     # figure the summary of radius mismatch
     fig, ax = plt.subplots()
+    plt.figure(figsize=(16, 9))
 
     ## radius mismatch
-    plt.title(f'Radius Mismatch Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Radius Mismatch Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             percent_dismatch = df.pop('Match%')
@@ -96,12 +102,12 @@ def main():
             print('some regions are not ok!')
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/radius_mismatch.png', dpi=300)
     plt.clf()
 
     ## total records
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total Records Count Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total Records Count Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('Total')
@@ -114,12 +120,12 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_records.png', dpi=300)
     plt.clf()
 
-    ## total no radiu
+    ## total no radius
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total No Radius Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total No Radius Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('NoRadius')
@@ -132,12 +138,12 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_no_radius.png', dpi=300)
     plt.clf()
 
     ## total with radius
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total With Radius Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total With Radius Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('WithRadius')
@@ -150,12 +156,12 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_with_radius.png', dpi=300)
     plt.clf()
 
     ## total SPR
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total SPR Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total SPR Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('SPR')
@@ -168,12 +174,12 @@ def main():
             print('some regions are not ok!', err)
     
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_SPR.png', dpi=300)
     plt.clf()
 
     ## total SP
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total SP Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total SP Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('SP')
@@ -186,12 +192,12 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_SP.png', dpi=300)
     plt.clf()
 
     ## total SR
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total SR Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total SR Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('SR')
@@ -204,13 +210,12 @@ def main():
             print('some regions are not ok!', err)
 
     # show and reset each figure
-    plt.show()
+    plt.savefig('imgs/total_SR.png', dpi=300)
     plt.clf()
 
     ## total S
     plt.ticklabel_format(style='plain', useOffset=False)
-    plt.ticklabel_format(style='plain', useOffset=False)
-    plt.title(f'Total S Summary Last {len(date)} Days', fontsize=18)
+    plt.title(f'Total S Summary from {date[0]} till {date[-1]}', fontsize=18)
     for i, df in enumerate(tmp_fixed_region_values):
         try:
             total_count = df.pop('S')
@@ -225,9 +230,10 @@ def main():
 
     plt.xlabel('Date', fontsize=13)
     plt.xticks(rotation=40)
-    plt.show()
+    plt.savefig('imgs/total_S.png', dpi=300)
 
     # TODO: fix each region rows (add zero mock row to needed region)
+    # TODO: save each images to the /imgs directory
 
 
 if __name__ == '__main__':
