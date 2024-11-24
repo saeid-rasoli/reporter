@@ -4,6 +4,7 @@ import itertools
 import numpy as np
 import matplotlib.ticker as mtick
 from matplotlib.ticker import FormatStrFormatter
+import dataframe_image as dfi
 
 
 # fix float format
@@ -79,8 +80,16 @@ def main():
         percent_match = df['NoRadius'] / df['Total'] * 100
         tmp_fixed_region_values[i]['Match%'] = percent_match
 
+    
+    # export dataframe with gradient style to png image
+    df_for_print = tmp_fixed_region_values
+    for i, df in enumerate(df_for_print):
+        df.index = date
+        df_styled = df.style.background_gradient()
+        dfi.export(df_styled, f'imgs/{regions[i]}.png', table_conversion="matplotlib", dpi=300)
 
-    # figure the summary of radius mismatch
+
+    figure the summary of radius mismatch
     fig, ax = plt.subplots()
     plt.figure(figsize=(16, 9))
 
