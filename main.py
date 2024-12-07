@@ -94,7 +94,7 @@ def main():
 
 
     # figure the summary of radius mismatch
-    print('Creating Plot Lines . . .\n')
+    print('Creating Line Plots . . .\n')
     fig, ax = plt.subplots()
     plt.figure(figsize=(16, 9))
 
