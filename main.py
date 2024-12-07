@@ -11,6 +11,7 @@ import dataframe_image as dfi
 pd.options.display.float_format = '{:.2f}'.format
 
 def read_csv(filename):
+    print('Reading csv file . . .\n')
     with open(filename, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
@@ -81,16 +82,19 @@ def main():
         tmp_fixed_region_values[i]['Match%'] = percent_match
 
     
-    # export dataframe with gradient style to png image
+    # pivot table
+    print('Creating Pivot Tables . . .\n')
     df_for_print = tmp_fixed_region_values
     for i, df in enumerate(df_for_print):
         df.index = date
         df_styled = df.style.set_caption(f'Region: {regions[i].upper()}')
         df_styled.background_gradient()
+        # export dataframe with gradient style to png image
         dfi.export(df_styled, f'imgs/{regions[i]}.png', table_conversion="matplotlib", dpi=300)
 
 
     # figure the summary of radius mismatch
+    print('Creating Plot Lines . . .\n')
     fig, ax = plt.subplots()
     plt.figure(figsize=(16, 9))
 
@@ -246,6 +250,8 @@ def main():
 
     plt.xticks(rotation=40)
     plt.savefig('imgs/total_S.png', dpi=300)
+
+    print('Done.')
 
     # TODO: fix each region rows (add zero mock row to needed region)
 
