@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import itertools
 import numpy as np
-import matplotlib.ticker as mtick
 from matplotlib.ticker import FormatStrFormatter
 import dataframe_image as dfi
 
@@ -104,12 +103,10 @@ def main():
         try:
             percent_dismatch = df.pop('Match%')
             plt.plot(date, percent_dismatch, label=f"{regions[i].upper()} x̄ = {np.mean(percent_dismatch):.2f}%", linewidth=2)
-            plt.ylabel('percentage', fontsize=13)
+            plt.ylabel('percentage %', fontsize=13)
             plt.grid(linestyle='dotted')
             plt.legend()
 
-            # fix ytick formatter
-            plt.yticks(plt.yticks()[0], ['{:.0f}%'.format(x) for x in plt.yticks()[0]])
 
         except:
             print('some regions are not ok!')
