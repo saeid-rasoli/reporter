@@ -9,6 +9,9 @@ import dataframe_image as dfi
 # fix float format
 pd.options.display.float_format = '{:.2f}'.format
 
+# global vars
+regions = ['tee', 'tew', 'ta', 'is', 'sh', 'ma', 'ah', 'al', 'bl']
+
 def read_csv(filename):
     print('Reading csv file . . .\n')
     with open(filename, 'r', encoding='utf-8') as f:
@@ -37,21 +40,43 @@ def read_csv(filename):
 
         return dataframes
 
+# read ftp and ipdr
+def add_filecounts(df, filename_ftp, filename_ipdr):
+    ftp = list()
+    ipdr = list()
+
+    with open(filename_ftp, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        for line in lines:
+            ftp.append(int(line.split()[0]))
+    
+    with open(filename_ipdr, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        for line in lines:
+            ipdr.append(int(line.split()[0]))
+    
+    return (ftp, ipdr)
+
 
 def main():
     filename = 'all_regions_daily.csv'
+    filename_ftp = 'file_counts_ftp.txt'
+    filename_ipdr = 'file_counts_ipdr.txt'
     dfs = read_csv(filename)
     tmp_fixed_region_values = list()
     fixed_dfs = list()
     numeric_dfs = list()
     date = list()
-    regions = ['tee', 'tew', 'ta', 'is', 'sh', 'ma', 'ah', 'al', 'bl']
 
     # fix None rows
     for df in dfs:
         df = df.replace(to_replace='None', value=None).dropna()
         fixed_dfs.append(df)
 
+    # add filecount_ftp and filecount_ipdr
+    ftp, ipdr = add_filecounts(dfs, filename_ftp, filename_ipdr)
+
+    counter = 0
     # drop date and match to fix numeric values to int
     for i, df in enumerate(fixed_dfs):
         date.append(df['Date'])
@@ -61,13 +86,17 @@ def main():
         numeric_dfs.append(df)
         dfs[i] = df
 
+        # add ftp and ipdr column to the dataframe
+        dfs[i]['FtpFilesCount'] = ftp[counter:(counter + len(dfs[i]))]
+        dfs[i]['IpdrFilesCount'] = ipdr[counter:(counter + len(dfs[i]))]
+        counter += len(dfs[i])
+
     # create uniq date
     date = sorted(list(set(itertools.chain(*date))))
 
     for i, day in enumerate(date):
         day = day[:4] + '-' + day[4:6] + '-' + day[6:]
         date[i] = day
-    
 
     # union of two region to one (tee11 + tee21)
     for i in range(0, len(dfs), 2):
@@ -83,8 +112,7 @@ def main():
     
     # pivot table
     print('Creating Pivot Tables . . .\n')
-    df_for_print = tmp_fixed_region_values
-    for i, df in enumerate(df_for_print):
+    for i, df in enumerate(tmp_fixed_region_values):
         df.index = date
         df_styled = df.style.set_caption(f'Region: {regions[i].upper()}')
         df_styled.background_gradient()
@@ -106,10 +134,8 @@ def main():
             plt.ylabel('percentage %', fontsize=13)
             plt.grid(linestyle='dotted')
             plt.legend()
-
-
-        except:
-            print('some regions are not ok!')
+        except Exception as err:
+            print('some regions are not ok!', err)
 
     # show and reset each figure
     plt.xticks(rotation=40)
@@ -247,6 +273,44 @@ def main():
 
     plt.xticks(rotation=40)
     plt.savefig('imgs/total_S.png', dpi=300)
+    plt.clf()
+
+    # ftp files count
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total FTP Files Count from {date[0]} till {date[-1]}', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('FtpFilesCount')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of FTP Files Count', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+
+    plt.xticks(rotation=40)
+    plt.savefig('imgs/ftp_files_count.png', dpi=300)
+    plt.clf()
+
+    # ipdr files count
+    plt.ticklabel_format(style='plain', useOffset=False)
+    plt.title(f'Total IPDR Files Count from {date[0]} till {date[-1]}', fontsize=18)
+    for i, df in enumerate(tmp_fixed_region_values):
+        try:
+            total_count = df.pop('IpdrFilesCount')
+            plt.plot(date, total_count, label=f"{regions[i].upper()}", linewidth=2)
+            plt.ylabel('Number Of IPDR Files Count', fontsize=13)
+            plt.grid(linestyle='dotted')
+            plt.legend()
+
+        except Exception as err:
+            print('some regions are not ok!', err)
+
+
+    plt.xticks(rotation=40)
+    plt.savefig('imgs/ipdr_files_count.png', dpi=300)
 
     print('Done.')
 
